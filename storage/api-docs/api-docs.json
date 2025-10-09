@@ -1,0 +1,182 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "CryptoInvestment API",
+        "description": "Documentación de la API para el monitoreo e inversión en criptomonedas usando CoinMarketCap.",
+        "contact": {
+            "email": "soporte@cryptoinvestment.local"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8002",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/coins": {
+            "get": {
+                "tags": [
+                    "Criptomonedas"
+                ],
+                "summary": "Listar todas las criptomonedas rastreadas",
+                "operationId": "3dfd27704add70f568222cf153cab532",
+                "responses": {
+                    "200": {
+                        "description": "Lista de criptomonedas con sus últimos precios"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Criptomonedas"
+                ],
+                "summary": "Agregar una nueva criptomoneda a la lista de seguimiento",
+                "operationId": "b73793f9b2957e78942dc8b35c59b1f6",
+                "parameters": [
+                    {
+                        "name": "symbol",
+                        "in": "query",
+                        "description": "Símbolo de la criptomoneda (ej: BTC, ETH)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Criptomoneda agregada exitosamente"
+                    },
+                    "400": {
+                        "description": "Símbolo no proporcionado"
+                    },
+                    "500": {
+                        "description": "Error al conectarse con CoinMarketCap"
+                    }
+                }
+            }
+        },
+        "/api/coins/{id}/prices": {
+            "get": {
+                "tags": [
+                    "Criptomonedas"
+                ],
+                "summary": "Obtener precios históricos de una criptomoneda rastreada",
+                "operationId": "d7389fa159b2db5bfbcd9c337a455d02",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la criptomoneda rastreada",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de precios en el rango solicitado"
+                    },
+                    "404": {
+                        "description": "Criptomoneda no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/coins/{id}/latest": {
+            "get": {
+                "tags": [
+                    "Criptomonedas"
+                ],
+                "summary": "Obtener el precio más reciente de una criptomoneda rastreada",
+                "operationId": "6dc9c407419ed26ed29c91cf44d7c9a7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la criptomoneda rastreada",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Último precio registrado"
+                    },
+                    "404": {
+                        "description": "No hay registros de precios"
+                    }
+                }
+            }
+        },
+        "/api/coins/{id}": {
+            "delete": {
+                "tags": [
+                    "Criptomonedas"
+                ],
+                "summary": "Eliminar una criptomoneda rastreada",
+                "operationId": "7c9a635fb3796fe5826d811a53ba6fdb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la criptomoneda rastreada a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Criptomoneda eliminada correctamente"
+                    },
+                    "404": {
+                        "description": "Criptomoneda no encontrada"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Criptomonedas",
+            "description": "Criptomonedas"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Introduce el token en el formato (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}
